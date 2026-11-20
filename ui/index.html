@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>NoteForge</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-theme="dark">
+<div class="app">
+
+  <aside class="side">
+    <div class="brand">
+      <div class="logo" data-ico="feather"></div>
+      <div><h1>NoteForge</h1><small>Write • Organize • More</small></div>
+    </div>
+
+    <nav class="nav">
+      <button class="nav-item active" data-view="all"><i data-ico="notes"></i><span>All Notes</span><b id="cnt-all">0</b></button>
+      <button class="nav-item" data-view="recent"><i data-ico="clock"></i><span>Recent</span><b id="cnt-recent">0</b></button>
+      <button class="nav-item" data-view="locked"><i data-ico="lock"></i><span>Passwords</span><b id="cnt-locked">0</b></button>
+      <button class="nav-item" data-view="trash"><i data-ico="trash"></i><span>Trash</span><b id="cnt-trash">0</b></button>
+    </nav>
+
+    <div class="section">Notes</div>
+    <div class="notelist" id="notelist"></div>
+
+    <div class="section">Features</div>
+    <nav class="nav">
+      <button class="nav-item" data-go="calendar"><i data-ico="calendar"></i><span>Calendar</span></button>
+      <button class="nav-item" data-go="todo"><i data-ico="check"></i><span>To-Do List</span></button>
+      <button class="nav-item" data-go="snippets"><i data-ico="snippet"></i><span>Snippets</span></button>
+      <button class="nav-item" data-go="themes"><i data-ico="palette"></i><span>Themes</span></button>
+      <button class="nav-item" id="open-settings"><i data-ico="gear"></i><span>Settings</span></button>
+    </nav>
+
+    <div class="sync-card">
+      <div class="sync-title">Google Drive</div>
+      <div id="sync-text">Not synced yet</div>
+      <button id="sync-btn" class="ghost">Sync now</button>
+    </div>
+  </aside>
+
+  <main class="center">
+    <header class="tabs">
+      <div id="tabbar" class="tabbar"></div>
+      <button id="new-note" class="icon-btn" title="New note" data-ico="plus"></button>
+    </header>
+
+    <div class="toolbar">
+      <div class="fmt">
+        <button data-fmt="bold" title="Bold" data-ico="bold"></button>
+        <button data-fmt="italic" title="Italic" data-ico="italic"></button>
+        <button data-fmt="h1" title="Heading" data-ico="heading"></button>
+        <button data-fmt="list" title="List" data-ico="list"></button>
+        <button data-fmt="check" title="Checkbox" data-ico="check"></button>
+        <button data-fmt="quote" title="Quote" data-ico="quote"></button>
+        <button data-fmt="code" title="Code" data-ico="code"></button>
+        <button data-fmt="link" title="Link" data-ico="link"></button>
+      </div>
+      <button id="lock-btn" class="ghost" title="Lock note"><i data-ico="lock"></i> Lock</button>
+      <input id="find" class="find" placeholder="Filter notes" />
+      <button id="toggle-preview" class="ghost">Preview</button>
+    </div>
+
+    <div class="panes">
+      <div class="editor-wrap">
+        <textarea id="editor" spellcheck="false" placeholder="Start writing..."></textarea>
+        <div id="lockscreen" class="lockscreen hidden">
+          <div class="lock-box">
+            <i data-ico="lock"></i>
+            <h3 id="lock-title">This note is locked</h3>
+            <p id="lock-hint">Enter the password to open it.</p>
+            <div class="lock-actions" id="lock-actions"></div>
+          </div>
+        </div>
+      </div>
+      <section id="preview-pane" class="preview hidden">
+        <div class="preview-head">Preview</div>
+        <div id="preview" class="preview-body"></div>
+      </section>
+    </div>
+
+    <section class="bottom">
+      <div class="card" id="themes">
+        <div class="card-head">Themes</div>
+        <div class="theme-row" id="theme-row"></div>
+      </div>
+      <div class="card snip" id="snippets">
+        <div class="card-head">Snippets <button id="snip-add" class="mini">+</button></div>
+        <div id="snip-list"></div>
+      </div>
+    </section>
+
+    <footer class="status">
+      <span><i class="dot"></i> <span id="saved">Saved</span></span>
+      <span id="counts">Words: 0 | Characters: 0</span>
+      <span id="line">Line: 1</span>
+      <span class="grow"></span>
+      <span>Auto Save: ON</span>
+      <span id="sync-status">Sync: idle</span>
+    </footer>
+  </main>
+
+  <aside class="right">
+    <div class="card" id="calendar">
+      <div class="card-head">Calendar</div>
+      <div class="cal-nav">
+        <button id="cal-prev" class="mini">‹</button>
+        <span id="cal-title"></span>
+        <button id="cal-next" class="mini">›</button>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div id="cal-events"></div>
+    </div>
+    <div class="card" id="todo">
+      <div class="card-head">To-Do List</div>
+      <input id="todo-input" class="find" placeholder="Add a task and press Enter" />
+      <div id="todo-list"></div>
+    </div>
+  </aside>
+
+</div>
+
+<dialog id="pw-dialog" class="glass">
+  <h3 id="pw-title">Password</h3>
+  <input id="pw-input" type="password" class="find" />
+  <div class="dialog-actions">
+    <button id="pw-cancel" class="ghost">Cancel</button>
+    <button id="pw-ok" class="primary">OK</button>
+  </div>
+</dialog>
+
+<dialog id="settings-dialog" class="glass">
+  <h3>Settings</h3>
+  <p class="muted">Notes sync to the "NoteForge" folder on your Google Drive.</p>
+  <div class="dialog-actions">
+    <button id="set-sync" class="ghost">Sync now</button>
+    <button id="set-reset" class="ghost">Sign out of Google</button>
+    <button id="set-close" class="primary">Close</button>
+  </div>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>
