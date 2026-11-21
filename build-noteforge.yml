@@ -1,0 +1,27 @@
+name: Build NoteForge
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt pyinstaller
+
+      - name: Build NoteForge.exe
+        run: pyinstaller --noconfirm --onefile --windowed --name NoteForge --collect-all webview --add-data "ui;ui" app.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NoteForge-windows
+          path: dist/NoteForge.exe
